@@ -4,10 +4,17 @@ import { SiteSettings, ViewType } from '../types';
 
 interface FooterProps {
   settings: SiteSettings;
-  onAdminClick?: (view: ViewType) => void;
+  onNavigate?: (view: ViewType) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
+const Footer: React.FC<FooterProps> = ({ settings, onNavigate }) => {
+  const handleServiceClick = (view: ViewType) => {
+    if (onNavigate) {
+      onNavigate(view);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="bg-black border-t border-purple-900/30 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,10 +31,18 @@ const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
           <div>
             <h3 className="text-xs font-black text-purple-400 uppercase tracking-widest mb-6">Service</h3>
             <ul className="space-y-4 text-sm text-gray-400 font-light">
-              <li className="hover:text-purple-400 cursor-pointer transition-colors">1:1 아트코칭</li>
-              <li className="hover:text-purple-400 cursor-pointer transition-colors">아트 딜러 프로그램</li>
-              <li className="hover:text-purple-400 cursor-pointer transition-colors">VIP 독서클럽 리포트</li>
-              <li className="hover:text-purple-400 cursor-pointer transition-colors">프라이빗 옥션 투어</li>
+              <li onClick={() => handleServiceClick('coaching')} className="hover:text-purple-400 cursor-pointer transition-colors flex items-center gap-2">
+                1:1 아트코칭
+              </li>
+              <li onClick={() => handleServiceClick('coaching')} className="hover:text-purple-400 cursor-pointer transition-colors">
+                아트 딜러 프로그램
+              </li>
+              <li onClick={() => handleServiceClick('club')} className="hover:text-purple-400 cursor-pointer transition-colors flex items-center gap-2">
+                VIP 독서클럽 리포트 <span className="text-[9px] bg-purple-900/50 px-1.5 py-0.5 rounded text-purple-300">Member</span>
+              </li>
+              <li onClick={() => handleServiceClick('home')} className="hover:text-purple-400 cursor-pointer transition-colors">
+                프라이빗 옥션 투어
+              </li>
             </ul>
           </div>
           <div>
@@ -44,9 +59,8 @@ const Footer: React.FC<FooterProps> = ({ settings, onAdminClick }) => {
              <span className="text-gray-600 text-[11px] font-medium tracking-wide">
               &copy; {new Date().getFullYear()} Art On Tok. Intellectual Property Reserved.
             </span>
-            {/* 관리자 전용 숨겨진 진입점: 마침표 형태로 아주 작게 배치하거나 Admin 텍스트로 배치 */}
             <button 
-              onClick={() => onAdminClick && onAdminClick('admin')}
+              onClick={() => handleServiceClick('admin')}
               className="text-zinc-800 hover:text-zinc-700 transition-colors text-[10px] ml-1 font-bold"
             >
               Admin

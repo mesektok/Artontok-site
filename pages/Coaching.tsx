@@ -6,7 +6,7 @@ interface CoachingProps {
   settings: SiteSettings;
 }
 
-type QuizStep = 'start' | 'q1' | 'q2' | 'q3' | 'result' | 'form';
+type QuizStep = 'start' | 'q1' | 'q2' | 'q3' | 'result' | 'form' | 'dealer_info';
 
 const Coaching: React.FC<CoachingProps> = ({ settings }) => {
   const [quizStep, setQuizStep] = useState<QuizStep>('start');
@@ -73,7 +73,12 @@ const Coaching: React.FC<CoachingProps> = ({ settings }) => {
     e.preventDefault();
     setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
-    const data = { ...Object.fromEntries(formData.entries()), ...answers, result: getResult().type };
+    const data = { 
+      ...Object.fromEntries(formData.entries()), 
+      ...answers, 
+      result: getResult().type,
+      program: answers.program || '1:1 Coaching'
+    };
 
     try {
       const response = await fetch("https://formspree.io/f/mwvvvanz", {
@@ -103,7 +108,7 @@ const Coaching: React.FC<CoachingProps> = ({ settings }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-in slide-in-from-bottom-8 duration-700">
       <header className="mb-20 text-center md:text-left">
         <span className="text-purple-500 font-black tracking-widest text-sm uppercase px-4 py-1.5 bg-purple-900/10 rounded-full border border-purple-500/20">Exclusive Program</span>
-        <h1 className="text-5xl md:text-8xl font-black mt-8 mb-8 tracking-tighter">ART COACHING</h1>
+        <h1 className="text-5xl md:text-8xl font-black mt-8 mb-8 tracking-tighter uppercase">Art Coaching</h1>
         <p className="text-xl text-gray-400 max-w-3xl leading-relaxed font-light">
           당신의 취향을 가치로 바꾸는 시간. <br />
           아트 온 톡은 데이터 기반 분석과 예술적 감성을 결합하여 <br />
@@ -119,12 +124,14 @@ const Coaching: React.FC<CoachingProps> = ({ settings }) => {
           <div className="flex flex-col items-center justify-center p-12 md:p-24 text-center">
             <h3 className="text-3xl md:text-4xl font-black mb-6">나만의 아트코치 매칭 테스트</h3>
             <p className="text-gray-400 mb-12 max-w-lg">단 30초, 3가지 질문을 통해 당신의 예술적 성향을 분석하고 <br />가장 적합한 전문 코치를 추천해 드립니다.</p>
-            <button 
-              onClick={() => setQuizStep('q1')}
-              className="px-12 py-5 bg-purple-600 text-white font-black rounded-full hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-95 text-lg"
-            >
-              테스트 시작하기
-            </button>
+            <div className="flex gap-4">
+               <button 
+                onClick={() => setQuizStep('q1')}
+                className="px-12 py-5 bg-purple-600 text-white font-black rounded-full hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-95 text-lg"
+              >
+                테스트 시작하기
+              </button>
+            </div>
           </div>
         ) : quizStep === 'q1' ? (
           <div className="p-8 md:p-16 animate-in fade-in slide-in-from-right-8 duration-500">
@@ -239,6 +246,46 @@ const Coaching: React.FC<CoachingProps> = ({ settings }) => {
              )}
           </div>
         )}
+      </section>
+
+      {/* Art Dealer Specialist Section */}
+      <section className="mb-32 py-20 bg-zinc-950 rounded-[3rem] border border-purple-500/10 overflow-hidden relative">
+         <div className="max-w-5xl mx-auto px-8">
+            <div className="flex flex-col md:flex-row gap-16 items-center">
+               <div className="flex-1">
+                  <span className="text-purple-500 text-xs font-black uppercase tracking-[0.3em]">Professional Path</span>
+                  <h2 className="text-4xl md:text-5xl font-black mt-4 mb-8">아트 딜러 양성 과정</h2>
+                  <p className="text-gray-400 leading-relaxed mb-8">
+                    단순한 컬렉터를 넘어 예술의 가치를 전달하는 전문가가 되십시오. 
+                    아트 온 톡의 딜러 프로그램은 실무 지식, 네트워크, 그리고 실제 거래 시스템을 제공합니다.
+                  </p>
+                  <ul className="space-y-4 mb-10">
+                    {["국내외 옥션 프로세스 마스터", "작품 진위 판별 및 컨디션 체크 실무", "고액 자산가 응대 매너 및 상담 기술", "아트 온 톡 인증 공식 딜러 자격 부여"].map(item => (
+                      <li key={item} className="flex items-center gap-3 text-sm text-gray-300">
+                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div> {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <button 
+                    onClick={() => {
+                      setAnswers({ program: 'Art Dealer Program' });
+                      setQuizStep('form');
+                    }}
+                    className="px-10 py-4 bg-purple-600/20 border border-purple-500/30 text-purple-400 font-bold rounded-full hover:bg-purple-600 hover:text-white transition-all"
+                  >
+                    딜러 과정 문의하기
+                  </button>
+               </div>
+               <div className="flex-1 relative">
+                  <div className="aspect-[4/5] bg-zinc-900 rounded-3xl overflow-hidden border border-white/5 rotate-3 hover:rotate-0 transition-transform duration-700">
+                    <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover grayscale" alt="Dealer" />
+                  </div>
+                  <div className="absolute -bottom-6 -left-6 p-6 bg-white text-black font-black rounded-2xl shadow-2xl">
+                    Art Master Certificate
+                  </div>
+               </div>
+            </div>
+         </div>
       </section>
 
       {/* Program Details Section */}

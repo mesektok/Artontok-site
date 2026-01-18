@@ -15,13 +15,25 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<SiteSettings>(INITIAL_SETTINGS);
   const [posts, setPosts] = useState<Post[]>(SAMPLE_POSTS);
 
-  // Persistence (Simulating CMS DB)
+  // Persistence with Error Handling
   useEffect(() => {
-    const savedSettings = localStorage.getItem('artontok_settings');
-    const savedPosts = localStorage.getItem('artontok_posts');
-    if (savedSettings) setSettings(JSON.parse(savedSettings));
-    if (savedPosts) setPosts(JSON.parse(savedPosts));
+    try {
+      const savedSettings = localStorage.getItem('artontok_settings');
+      const savedPosts = localStorage.getItem('artontok_posts');
+      if (savedSettings) setSettings(JSON.parse(savedSettings));
+      if (savedPosts) {
+        const parsedPosts = JSON.parse(savedPosts);
+        if (Array.isArray(parsedPosts)) setPosts(parsedPosts);
+      }
+    } catch (error) {
+      console.error("Failed to load persistence data:", error);
+    }
   }, []);
+
+  // Scroll to top on view change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [view]);
 
   const saveSettings = (newSettings: SiteSettings) => {
     setSettings(newSettings);
@@ -66,12 +78,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-black text-white selection:bg-purple-500 selection:text-white antialiased">
       <Navbar currentView={view} setView={setView} />
-      <main className="pt-16 min-h-[calc(100vh-160px)] scroll-smooth">
+      <main className="pt-16 min-h-[calc(100vh-160px)]">
         {renderContent()}
       </main>
-      <Footer settings={settings} onAdminClick={setView} />
+      <Footer settings={settings} onNavigate={setView} />
     </div>
   );
 };
