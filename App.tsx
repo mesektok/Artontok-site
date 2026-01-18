@@ -15,22 +15,29 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<SiteSettings>(INITIAL_SETTINGS);
   const [posts, setPosts] = useState<Post[]>(SAMPLE_POSTS);
 
-  // Persistence with Error Handling
+  // Persistence with Improved Error Handling
   useEffect(() => {
     try {
       const savedSettings = localStorage.getItem('artontok_settings');
       const savedPosts = localStorage.getItem('artontok_posts');
-      if (savedSettings) setSettings(JSON.parse(savedSettings));
+      if (savedSettings) {
+        const parsedSettings = JSON.parse(savedSettings);
+        if (parsedSettings && typeof parsedSettings === 'object') {
+          setSettings(parsedSettings);
+        }
+      }
       if (savedPosts) {
         const parsedPosts = JSON.parse(savedPosts);
-        if (Array.isArray(parsedPosts)) setPosts(parsedPosts);
+        if (Array.isArray(parsedPosts)) {
+          setPosts(parsedPosts);
+        }
       }
     } catch (error) {
-      console.error("Failed to load persistence data:", error);
+      console.warn("Could not load saved data from localStorage:", error);
     }
   }, []);
 
-  // Scroll to top on view change
+  // Automatic scroll to top on view change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);

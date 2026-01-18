@@ -88,8 +88,16 @@ const Home: React.FC<HomeProps> = ({ settings, posts, onNavigate }) => {
           <div className="flex flex-col md:flex-row items-center gap-16">
              <div className="flex-1 order-2 md:order-1">
                 <div className="grid grid-cols-2 gap-4">
-                  <img src="https://images.unsplash.com/photo-1554907984-15263bfd63bd?auto=format&fit=crop&q=80&w=400" className="rounded-2xl w-full h-64 object-cover" alt="Art Exhibition" />
-                  <img src="https://images.unsplash.com/photo-1518998053502-51dd0c61ee2a?auto=format&fit=crop&q=80&w=400" className="rounded-2xl w-full h-64 object-cover mt-8" alt="Gallery Interior" />
+                  <img 
+                    src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=600" 
+                    className="rounded-2xl w-full h-64 object-cover shadow-2xl" 
+                    alt="Auction Art Highlights" 
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=600" 
+                    className="rounded-2xl w-full h-64 object-cover mt-8 border border-white/5 shadow-2xl" 
+                    alt="Exclusive Gallery Tour" 
+                  />
                 </div>
              </div>
              <div className="flex-1 order-1 md:order-2">
